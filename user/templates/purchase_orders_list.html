@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Orders List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add any custom CSS styles here */
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'adminpage' %}">Home</a>
+                </li>
+                <!-- Add other nav items as needed -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Purchase Orders List</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Product</th>
+                        <th>Supplier</th>
+                        <th>Delivered Quantity</th>
+                        <th>Date</th>
+                        <th>Current Status</th>
+                        <th>Update Stock</th>
+                        <th>Invoice</th> <!-- Added Invoice column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in purchase_orders %}
+                        <tr>
+                            <td>{{ order.user.username }}</td>
+                            <td>{{ order.product.name }}</td>
+                            <td>{{ order.supplier.username }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.status.status }}</td>
+                            {% if order.status.status == 'delivered' %}
+                                <td>
+                                    <form method="post" action="{% url 'admin_update_stock' order.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input type="number" name="stock_quantity" value="{{ order.quantity }}" class="form-control" readonly>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update Stock</button>
+                                    </form>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'view_invoice' order.id %}" class="btn btn-info">View Invoice</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8">No purchase orders found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

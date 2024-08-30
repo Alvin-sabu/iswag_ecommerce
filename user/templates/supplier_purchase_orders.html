@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supplier Purchase Orders</title>
+</head>
+<body>
+    <h1>Supplier Purchase Orders</h1>
+    <ul>
+        {% for order in orders %}
+            <li>{{ order.id }} - {{ order.status }} - <a href="{% url 'update_order_status' order.id %}">Update Status</a></li>
+        {% empty %}
+            <li>No purchase orders available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

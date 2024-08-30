@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Give Purchase Order</title>
+    <!-- Bootstrap CSS or any other CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Give Purchase Order</h1>
+        <form method="post" action="{% url 'send_purchase_order_email' product.id %}">
+            {% csrf_token %}
+            <!-- Existing fields: supplier selection and quantity -->
+            <div class="form-group">
+                <label for="id_supplier">Supplier:</label>
+                <select name="supplier" id="id_supplier" class="form-control" required>
+                    {% for supplier in suppliers %}
+                        <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="id_quantity">Quantity:</label>
+                <input type="number" class="form-control" id="id_quantity" name="quantity" required>
+            </div>
+            <!-- New field: supplier_email -->
+            <div class="form-group">
+                <label for="id_supplier_email">Supplier Email:</label>
+                <input type="email" class="form-control" id="id_supplier_email" name="supplier_email" required>
+            </div>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Place Order and Send Email</button>
+        </form>
+        
+    </div>
+
+    <!-- Bootstrap JS or any other JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

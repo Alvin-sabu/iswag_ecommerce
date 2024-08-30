@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        .product-list {
+            list-style: none;
+            padding: 0;
+        }
+        .product-item {
+            margin-bottom: 20px;
+        }
+        .product-item img {
+            max-width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+        .product-item h4 {
+            margin-bottom: 10px;
+        }
+        .product-item p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>All Products:</h2>
+        <ul class="product-list">
+            {% for product in productdata %}
+                {% if product.is_active %}
+                    <li class="product-item">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" data-toggle="modal" data-target="#productModal{{ product.id }}">
+                            <div>
+                                <h4>{{ product.name }}</h4>
+                                <p>Price: Rs{{ product.price }}</p>
+                                <a href="{% url 'edit_product' product.id %}" class="btn btn-success">Edit</a>
+                                <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS and dependencies (jQuery, Popper.js) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

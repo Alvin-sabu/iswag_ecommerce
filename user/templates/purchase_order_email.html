@@ -1,0 +1,12 @@
+<!-- purchase_order_email.html -->
+<html>
+<body>
+    <p>Dear Supplier,</p>
+    <p>You have a new purchase order:</p>
+    <p>Order ID: {{ order_id }}</p>
+    <p>Status: {{ status }}</p>
+    <p>Please click the link below to update the status:</p>
+    <p><a href="{{ update_status_url }}">Update Status</a></p>
+    <p>Thank you!</p>
+</body>
+</html>

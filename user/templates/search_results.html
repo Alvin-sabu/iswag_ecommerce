@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results</title>
+  <style>
+    /* CSS styles for the search results */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      margin-bottom: 20px;
+    }
+
+    .header a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 20px;
+    }
+
+    .search-results {
+      margin-top: 20px;
+    }
+
+    .product-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .product-item {
+      margin-right: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+      flex: 0 0 calc(33.33% - 20px);
+      margin-bottom: 20px;
+    }
+
+    .product-details {
+      margin-bottom: 10px;
+    }
+
+    .add-to-cart {
+      background-color: #205ea1;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: block;
+      width: 100%;
+    }
+
+    .add-to-cart:hover {
+      background-color: #0056b3;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      color: #0f3156;
+      text-decoration: none;
+    }
+ 
+    .no-results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/">iWATCH</a>
+    
+  </div>
+  
+  {% if products %}
+    <div class="search-results">
+      <h2>Search Results for "{{ query }}"</h2>
+      <ul class="product-list">
+        {% for product in products %}
+          <li class="product-item">
+            <div class="product-details">
+              <h3>{{ product.name }}</h3>
+              <img src="{{ product.image.url }}" alt="{{ product.name }} Image">
+              <p>Description: {{ product.description }}</p>
+              <p>Price:₹ {{ product.price }}</p>
+            </div>
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+              {% csrf_token %}
+              <button type="submit" class="add-to-cart">Add to Cart</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+      
+    </div>
+  {% else %}
+    <div class="no-results">
+      <p>No products found for "{{ query }}".</p>
+      
+    </div>
+  {% endif %}
+</body>
+</html>

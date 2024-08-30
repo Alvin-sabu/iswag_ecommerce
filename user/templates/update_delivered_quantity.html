@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Delivered Quantity</title>
+</head>
+<body>
+    <h1>Update Delivered Quantity</h1>
+    <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" width="200">
+    <form method="post" action="{% url 'admin_update_stock' order.id %}">
+        {% csrf_token %}
+        <label for="delivered_quantity">Delivered Quantity:</label>
+        <input type="text" id="delivered_quantity" name="delivered_quantity" value="{{ order.quantity }}" readonly>
+        <button type="submit">Update Stock</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Invoice</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .invoice-box {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .invoice-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .invoice-header h4 {
+            margin: 5px 0 0;
+            font-size: 18px;
+            color: #666;
+        }
+        .invoice-details {
+            margin-bottom: 20px;
+        }
+        .invoice-details th, .invoice-details td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        .invoice-details th {
+            background-color: #f8f9fa;
+            text-align: left;
+        }
+        .invoice-details td {
+            text-align: right;
+        }
+        .invoice-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .invoice-footer button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .invoice-footer button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-button">
+            <a href="{% url 'supplier_dashboard' %}">Back to Dashboard</a>
+        </div>
+    <div class="invoice-box">
+        <div class="invoice-header">
+            <h2>Invoice</h2>
+            <h4>Customer: {{ order.user.username }}</h4>
+        </div>
+        <div class="invoice-details">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Invoice No:</th>
+                    <td>{{ order.id }}</td>
+                </tr>
+                <tr>
+                    <th>Order Date:</th>
+                    <td>{{ order.order_date }}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td>{{ order.status.status }}</td>
+                </tr>
+                <tr>
+                    <th>Customer Name:</th>
+                    <td>{{ order.user.username  }}</td>
+                </tr>
+                <tr>
+                    <th>Product:</th>
+                    <td>{{ order.product.name }}</td>
+                </tr>
+                <tr>
+                    <th>Quantity:</th>
+                    <td>{{ order.quantity }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="invoice-footer">
+            <button onclick="window.print()">Download Invoice</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

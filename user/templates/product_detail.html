@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <style>
+        /* Inline CSS styles */
+        /* Add any additional styles here */
+        /* Example: */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .product-info {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .product-actions {
+            flex-basis: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .related-products {
+            margin-top: 50px;
+        }
+    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <!-- Your header content and navigation bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">iWATCH</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                
+                <ul class="navbar-nav">
+                    
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view_to_wishlist/">Wishlist</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                
+                <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="product-details">
+            <div class="product-info">
+                <h1>{{ product.name }}</h1>
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <p>Description: {{ product.description }}</p>
+                <p>Price: Rs.{{ product.price }}</p>
+
+                <button id="toggleReviewsBtn" class="btn btn-primary">View Reviews</button>
+
+                <!-- Reviews section (hidden by default) -->
+                <div id="reviewsSection" style="display: none;">
+                    <h2>Reviews</h2>
+                    <ul>
+                        {% for review in reviews %}
+                            <li>
+                                <strong>{{ review.user.username }}</strong> - Rating: {{ review.rating }}
+                                <p>{{ review.review_text }}</p>
+                            </li>
+                        {% empty %}
+                            <li>No reviews yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="product-actions">
+                {% if user.is_authenticated and product.is_active and has_delivered_order %}
+                    <h3>Write a Review:</h3>
+                    <form method="post" action="{% url 'add_product_review' product_id=product.id %}">
+                        {% csrf_token %}
+                        <!-- Add fields for rating and review text -->
+                        <input type="number" name="rating" min="1" max="5" required>
+                        <textarea name="review_text" required></textarea>
+                        <button type="submit" class="btn btn-success">Submit Review</button>
+                    </form>
+                {% endif %}
+                <form action="{% url 'add_to_cart' product.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+                <a href="{% url 'add_to_wishlist' product.id %}" class="btn btn-outline-primary">Add to Wishlist</a>
+            </div>
+        </div>
+
+        <!-- Related Products Section (if applicable) -->
+       
+    </div>
+
+    <!-- Bootstrap JS and your inline JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleReviewsBtn = document.getElementById('toggleReviewsBtn');
+            const reviewsSection = document.getElementById('reviewsSection');
+        
+            // Add event listener to toggle button
+            toggleReviewsBtn.addEventListener('click', function() {
+                // Toggle visibility of reviews section
+                reviewsSection.style.display = (reviewsSection.style.display === 'none') ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

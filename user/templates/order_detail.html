@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order Detail</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add inline CSS styles */
+        body {
+            padding-top: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .order-info p {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .product-image {
+            max-width: 100px;
+            height: auto;
+            cursor: pointer;
+            /* Add cursor pointer to indicate clickable */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'order_list_and_detail' %}">Back</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <!-- Add other navigation links if needed -->
+                </ul>
+                <!-- Add a login/logout button or other user-related functionality if needed -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center">Order Detail</h1>
+        {% if request.user.is_superuser %}
+        <div class="order-info">
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+        </div>
+        {% endif %}
+        <div class="order-info">
+            <p><strong>Full Name:</strong> {{ order.fullname }}</p>
+            <p><strong>Address:</strong> {{ order.address }}, {{ order.city }}, {{ order.postal_code }}</p>
+            <p><strong>Total Amount:</strong> ${{ order.total_amount }}</p>
+            <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+        </div>
+
+        <h2>Order Items</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>IMAGE</th>
+                        <th>PRODUCT NAME</th>
+                        <th>QUANTITY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'product_detail' item.product.id %}">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                    class="product-image">
+                            </a>
+                        </td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery for advanced functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

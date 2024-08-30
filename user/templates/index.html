@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Product Page</title>
+    <style>
+       
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        #image {
+            background-image: url("https://wallpaperboat.com/wp-content/uploads/2019/10/smartwatch-10.jpg");
+            background-size: contain; /* Ensure the entire image is visible */
+            background-position: center; /* Center the background image vertically and horizontally */
+            width: 1500px; /* Adjust to preferred width */
+            height: 500px; /* Adjust to preferred height */
+        }
+
+        .header {
+            background-color: #7e8c9b;
+            padding: 0px;
+            width: 1500px;
+            text-align: center;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+        .header a:hover{
+            background-color: #214f88;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .product {
+            position: relative; /* Ensure relative positioning for absolute positioning inside */
+            text-align: center;
+            border: 2px solid #ccc;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .product-image-container {
+             position: relative;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .product .title {
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .product .description {
+            font-size: 14px;
+            margin: 10px 0;
+            color: #444;
+        }
+
+        .product .price {
+            font-size: 16px;
+            color: #02080e;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .product .add-to-cart {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            background-color: #364358;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .product .add-to-cart:hover {
+            background-color: #0056b3;
+        }
+
+        .product .add-to-wishlist {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            background-color: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .product .add-to-wishlist:hover {
+            background-color: #214f88;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 8px;
+            margin-right: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .search-bar button {
+            padding: 8px 12px;
+            background-color: #d5d8bd;
+            color: rgb(155, 36, 36);
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .stock-status {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 0, 0, 0.7); /* Red background with opacity */
+            color: white;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1; /* Ensure the message is above the image */
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px; /* Adjust as needed */
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .contact-info,
+        .company-address {
+            flex: 1 1 300px;
+            margin-bottom: 20px;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+        /* Styles for the heading */
+        .main-heading {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 3em;
+        color: #737372;
+        text-align: center;
+        letter-spacing: 3px;
+        margin-top: 20px;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+        
+        }
+        
+        
+
+        
+
+    </style>
+</head>
+<body>
+
+
+<div class="header">
+    
+    {% if user.is_authenticated %}
+    <h3 style="margin: 0; text-align: right; color: #eef0f2;padding-right: 20px;">
+        
+        <a href="{% url 'profile_update' %}" class="btn">Update Profile</a>
+        <a href="{% url 'orders' %}" class="btn">Track Orders</a>
+        <i class="fas fa-user"></i>{{ user.username }}
+        
+
+
+    </h3>
+    
+      
+    <a href="{% url 'view_to_wishlist' %}">Wishlist</a>
+    <a href="{% url 'cart' %}">Cart</a>
+    <a href="{% url 'user_logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'combined_login' %}">Login</a>
+    <a href="{% url 'supplier_login' %}">Supplier Login</a>
+    {% endif %}
+    <div class="search-bar">
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="query" placeholder="Search products...">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div> 
+    
+    <div class="search-bar">
+        <form method="GET" action="">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category.name }}" {% if selected_category == category.name %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+    </div>
+    
+    
+</div>
+<center><h1 class="main-heading">iWATCH</h1></center>
+<section id="image">
+    
+</section>
+
+<div class="grid-container">
+    {% for product in productdata|dictsort:"id"|dictsortreversed:"is_active" %}
+        {% if product.is_active %}
+            <div class="product {% if product.quantity <= 0 %}out-of-stock{% endif %}">
+                <div class="product-image-container">
+                    <a href="/product/{{ product.id }}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </a>
+                    {% if product.quantity <= 0 %}
+                        <div class="stock-status">Out of Stock</div>
+                    {% endif %}
+                </div>
+                <div class="title">{{ product.name }}</div>
+                <div class="price">₹{{ product.price }}</div>
+                {% if product.quantity > 0 %}
+                    <form action="{% url 'add_to_cart' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="add-to-cart">Add to cart</button>
+                    </form>
+                    <a href="{% url 'add_to_wishlist' product.id %}" class="add-to-wishlist">Wishlist</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="contact-info">
+            <h3>Contact Us</h3>
+            <p>Email: iwatch@gmail.com</p>
+            <p>Phone: +1234567890</p>
+        </div>
+        <div class="company-address">
+            <h3>Company Address</h3>
+            <p>Kannur, Kerala</p>
+            <p>Payyannur, India</p>
+        </div>
+    </div>
+    <div class="copyright">
+        <p>&copy; iWatch. All rights reserved.</p>
+    </div>
+</footer>
+
+
+
+</body>
+</html>

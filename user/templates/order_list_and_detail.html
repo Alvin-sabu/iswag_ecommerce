@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Orders List</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add inline CSS styles */
+        body {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .status-select {
+            width: 150px;
+        }
+
+        .cancel-btn,
+        .refund-btn {
+            width: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            {% if request.user.is_superuser %}
+            <a class="navbar-brand" href="{% url 'adminpage' %}">Home</a>
+            {% else %}
+            <a class="navbar-brand" href="{% url 'index' %}">Home</a>
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <!-- Add other navigation links if needed -->
+                </ul>
+                <!-- Add a login/logout button or other user-related functionality if needed -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center">Orders List</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        {% if request.user.is_superuser %}
+                        <th>ID</th>
+                        {% endif %}
+                        <th>Full Name</th>
+                        <th>Address</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        {% if not request.user.is_superuser %}
+                        <th>Refund Status</th>
+                        <th>Action</th>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <th>Update Status</th>
+                        {% endif %}
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        {% if request.user.is_superuser %}
+                        <td>{{ order.id }}</td>
+                        {% endif %}
+                        <td>{{ order.fullname }}</td>
+                        <td>{{ order.address }}, {{ order.city }}, {{ order.postal_code }}</td>
+                        <td>${{ order.total_amount }}</td>
+                        <td>
+                            {% if order.status == 'cancelled' %}
+                            <span style="color: red;">Cancelled</span>
+                            {% if request.user.is_superuser %}
+                            <form action="{% url 'refund_order' order.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning refund-btn">Refund</button>
+                            </form>
+                            {% endif %}
+                            {% else %}
+                            {{ order.get_status_display }}
+                            {% endif %}
+                        </td>
+                        {% if not request.user.is_superuser %}
+                        <td>
+                            {% if order.status == 'cancelled' %}
+                            {% if order.refund_status %}
+                            {{ order.get_refund_status_display }}
+                            {% else %}
+                            Not Refunded
+                            {% endif %}
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order.status != 'delivered' %}
+                            <form action="{% url 'cancel_order' order.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger cancel-btn">Cancel Order</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        {% if order.status != 'cancelled' %}
+                        <td>
+                            <form action="{% url 'update_status' order.id %}" method="post">
+                                {% csrf_token %}
+                                <select name="status" class="status-select">
+                                    <option value="processing">Processing</option>
+                                    <option value="out_for_delivery">Out for Delivery</option>
+                                    <option value="shipped">Shipped</option>
+                                    <option value="delivered">Delivered</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </td>
+                        {% else %}
+                        <td><span style="color: red;">Order Cancelled</span></td>
+                        {% endif %}
+                        {% endif %}
+                        <td><a href="{% url 'order_detail' order.id %}" class="btn btn-info">View Details</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery for advanced functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Supplier</title>
+</head>
+<body>
+    <h1>Delete Supplier</h1>
+    <p>Are you sure you want to delete supplier {{ supplier_id }} ({{ supplier.username }})?</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>
+</body>
+</html>

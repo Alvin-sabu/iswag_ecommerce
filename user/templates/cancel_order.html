@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancel Order</title>
+    <!-- Add Bootstrap CSS or any other CSS frameworks -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cancel Order</h1>
+        <p>Are you sure you want to cancel this order?</p>
+        <p>Order ID: {{ order.id }}</p>
+        <p>Total Amount: ${{ order.total_amount }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="submit" value="Cancel Order" class="btn btn-danger">
+        </form>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery for advanced functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
